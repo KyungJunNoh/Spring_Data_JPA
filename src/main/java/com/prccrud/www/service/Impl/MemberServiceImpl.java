@@ -2,6 +2,7 @@ package com.prccrud.www.service.Impl;
 
 import com.prccrud.www.domain.dto.MemberRequestDto;
 import com.prccrud.www.domain.entity.Member;
+import com.prccrud.www.exception.UserAlreadyExistsException;
 import com.prccrud.www.exception.UserNotFoundException;
 import com.prccrud.www.repository.MemberRepository;
 import com.prccrud.www.service.MemberService;
@@ -17,8 +18,11 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public void save(Member member) {
-        memberRepository.save(member);
+    public Member save(Member member) {
+        if(memberRepository.findById(member.getId()) != null){
+            throw new UserAlreadyExistsException();
+        }
+        return memberRepository.save(member);
     }
 
     @Override
