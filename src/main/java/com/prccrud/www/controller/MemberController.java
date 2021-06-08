@@ -1,11 +1,11 @@
 package com.prccrud.www.controller;
 
+import com.prccrud.www.domain.dto.MemberRequestDto;
 import com.prccrud.www.domain.entity.Member;
+import com.prccrud.www.exception.UserNotFoundException;
 import com.prccrud.www.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -20,14 +20,19 @@ public class MemberController {
     }
 
     @GetMapping("/read/{idx}")
-    public Optional<Member> read(@PathVariable("idx") Long idx){
-        Optional<Member> findMember = memberService.read(idx);
+    public Member read(@PathVariable("idx") Long idx){
+        Member findMember = memberService.read(idx);
         return findMember;
     }
 
-    @DeleteMapping("/delete/{idx}")
+    @PutMapping("/delete/{idx}")
     public String delete(@PathVariable("idx") Long idx){
         memberService.delete(idx);
         return idx + "삭제되었습니다";
+    }
+
+    @PutMapping("/update/{idx}")
+    public String update(@PathVariable("idx") Long idx, @RequestBody MemberRequestDto memberRequestDto){
+        return memberService.update(idx,memberRequestDto);
     }
 }
